@@ -1,17 +1,13 @@
 import React, { useState } from 'react'
 import { TextInput, Label, Button, Alert, Spinner } from 'flowbite-react'
 import { Link, useNavigate } from 'react-router-dom'
-import { signInStart, signInSuccess, signInFailure} from '../redux/user/userSlice';
-import { useDispatch, useSelector } from 'react-redux';  
-import OAuth from '../components/OAuth';
+import OAuth from '../components/OAuth'
 
-const SignIn = () => {
+
+const SignUp = () => {
   const [formData, setFormData] = useState({})
-  const {loading, error: errorMessage} = useSelector((state) => state.user);
-
-  const dispatch = useDispatch();
-
-  
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({...formData, [e.target.id]: e.target.value.trim()})
@@ -19,28 +15,28 @@ const SignIn = () => {
   }
  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.email || !formData.password) {
-      return dispatch(signInFailure('Please fill in all fields'));  
+    if (!formData.username || !formData.email || !formData.password) {
+      return setErrorMessage('Please fill out all fields.');
     }
     try {
-      dispatch(signInStart()); 
-      const res = await fetch('/api/auth/signin', {
+      setLoading(true);
+      setErrorMessage(null);
+      const res = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
       if (data.success === false) {
-        dispatch(signInFailure(data.message));
+        return setErrorMessage(data.message);
       }
-      
+      setLoading(false);
       if(res.ok) {
-        dispatch(signInSuccess(data));
-        navigate('/');
+        navigate('/sign-in');
       }
     } catch (error) {
-      dispatch(signInFailure(error.message));
-      
+      setErrorMessage(error.message);
+      setLoading(false);
     }
    
   } 
@@ -54,13 +50,21 @@ const SignIn = () => {
     <span className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-gray-900 to-slate-950 rounded-lg text-white '>Parrot's</span> Blog
 
     </Link>
-    <p className='text-sm mt-5'>Welcome to my blog You can signin with your email and password </p>
+    <p className='text-sm mt-5'>Welcome to my blog signup and share your thoughts </p>
 
     </div>
     {/* right side */}
     <div className='flex-1' onSubmit={handleSubmit}>
       <form onSubmit={handleSubmit} >
-    
+      <div>
+              <Label value='Your username' />
+              <TextInput
+                type='text'
+                placeholder='Username'
+                id='username'
+                onChange={handleChange}
+              />
+            </div>
             <div>
               <Label value='Your email' />
               <TextInput
@@ -74,7 +78,7 @@ const SignIn = () => {
               <Label value='Your password' />
               <TextInput
                 type='password'
-                placeholder='***********'
+                placeholder='Password'
                 id='password'
                 onChange={handleChange}
               />
@@ -85,10 +89,10 @@ const SignIn = () => {
             {loading ? (
               <>
                 <Spinner className='w-5 h-5' />
-                <span>Signing In</span>
+                <span>Signing Up</span>
               </>
             ) : (
-              <span>Sign In</span>
+              <span>Sign Up</span>
             )}
           </Button>
           <Link to='/signin'><Button gradientDuoTone='pinkToOrange' outline>Sign In</Button></Link>
@@ -97,8 +101,8 @@ const SignIn = () => {
       </form>
       {/* have an account signin */}
       <div className='flex gap-2 text-sm mt-5'>
-      <span>Dont have an account? </span>
-      <Link to='/signin'><span className='text-blue-500'>Sign Up</span></Link>
+      <span>Have an account?</span>
+      <Link to='/signin'><span className='text-blue-500'>Sign In</span></Link>
 
       </div>
       {/* error message */}
@@ -115,5 +119,4 @@ const SignIn = () => {
   )
 }
 
-export default SignIn
-
+export default SignUp

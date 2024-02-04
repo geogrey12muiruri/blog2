@@ -5,8 +5,9 @@ import Home from './pages/Home'
 import About from './pages/About'
 import Dashboard from './pages/Dashboard'
 import Signin from './pages/SignIn'
-import Signup from './pages/SsignUp'
+import Signup from './pages/SignUp'
 import Header from './components/Header'
+import Footer from './components/Footer'
 function App() {
  
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>
+          <Footer />
         </BrowserRouter>
 
         
