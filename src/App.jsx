@@ -9,6 +9,7 @@ import Signup from './pages/SignUp'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import PrivateRoute from './components/PrivateRoute'
+import CreatePost from './pages/CreatePost'
 function App() {
  
 
@@ -28,6 +29,7 @@ function App() {
             </Route>
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/create-post" element={<CreatePost/>} />
           </Routes>
           <Footer />
         </BrowserRouter>
