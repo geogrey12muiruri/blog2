@@ -24,8 +24,8 @@ export default function CreatePost() {
                <FileInput type='file' accept='image/*' />
                <Button type="button" gradientDuoTone='purpleToPink' size='sm' outline>Upload File</Button>
             </div>
-            <ReactQuill theme='snow' placeholder='start typing' className='h-72 mb-12'/>
-            
+            <ReactQuill theme='snow' placeholder='start typing' className='h-72 mb-12' required/>
+            <Button type='submit' gradientDuoTone='purpleToPink' size='lg'>Publish</Button>
         </form>
         </div>
     )
